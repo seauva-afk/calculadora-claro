@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Remuneración Variable - Política Claro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="css/base.css?v=46.0">
+    <link rel="stylesheet" href="css/components.css?v=46.0">
+    <link rel="stylesheet" href="css/layout.css?v=46.0">
+    <link rel="stylesheet" href="css/responsive.css?v=46.0">
+    <link rel="manifest" href="manifest.json">
+    <meta name="description" content="Calculadora de remuneración variable para asesores Claro. Calcula tu comisión en tiempo real según metas de ventas, NPS, retención y más.">
+    <meta name="theme-color" content="#ED1C24">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+</head>
+
+<body>
+    <!-- PANEL DE CONFIGURACIÓN (MODAL REPARADO) -->
+    <div id="config-container" role="dialog" aria-modal="true" aria-labelledby="config-title" tabindex="-1">
+        <div id="config-panel" class="ticket-style config-panel-inner">
+            <div class="ticket-header">
+                <span id="config-title" class="ticket-title">CONFIGURACIÓN DE METAS</span>
+                <button id="config-panel-close" class="close-button" aria-label="Cerrar configuración">&times;</button>
+            </div>
+
+            <div class="section-content config-section-content">
+                <div class="config-grid config-grid-row">
+                    <div class="text-center">
+                        <label for="configMes" class="config-label-header">Mes</label>
+                        <select id="configMes" class="input-full input-select-month">
+                            <option value="01">Enero</option>
+                            <option value="02">Febrero</option>
+                            <option value="03">Marzo</option>
+                            <option value="04">Abril</option>
+                            <option value="05">Mayo</option>
+                            <option value="06">Junio</option>
+                            <option value="07">Julio</option>
+                            <option value="08">Agosto</option>
+                            <option value="09">Septiembre</option>
+                            <option value="10">Octubre</option>
+                            <option value="11">Noviembre</option>
+                            <option value="12">Diciembre</option>
+                        </select>
+                    </div>
+                    <div class="text-center">
+                        <label for="configAnio" class="config-label-header">Año</label>
+                        <select id="configAnio" class="input-full input-select-year">
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="config-field-group">
+                    <label for="sueldoBase" class="config-label-header">Salario Fijo Mensual</label>
+                    <input type="text" data-type="currency" id="sueldoBase" class="input-full" placeholder="$ 0" inputmode="numeric">
+                </div>
+
+                <div class="modal-panel-title">METAS POSPAGO</div>
+                <div class="config-grid-3">
+                    <div class="config-row"><label for="metaLineaNueva">LN</label><input type="number" id="metaLineaNueva"
+                            class="input-mini" placeholder="0" min="0"></div>
+                    <div class="config-row"><label for="metaMigracion">Migra</label><input type="number" id="metaMigracion"
+                            class="input-mini" placeholder="0" min="0"></div>
+                    <div class="config-row"><label for="metaPortIn">Porta</label><input type="number" id="metaPortIn" class="input-mini" placeholder="0" min="0">
+                    </div>
+                </div>
+
+                <div class="modal-panel-title">METAS FIJO</div>
+                <div class="config-grid-3">
+                    <div class="config-row"><label for="metaVentasFijoAt">Fijo @</label><input type="number" id="metaVentasFijoAt"
+                            class="input-mini" placeholder="0" min="0"></div>
+                    <div class="config-row"><label for="metaSubFijoNeg">Neg @</label><input type="number" id="metaSubFijoNeg"
+                            class="input-mini" placeholder="0" min="0"></div>
+                    <div class="config-row"><label for="metaTvVoz">TV+Voz</label><input type="number" id="metaTvVoz" class="input-mini" placeholder="0" min="0">
+                    </div>
+                </div>
+
+                <div class="modal-panel-title">OTRAS METAS</div>
+                <div class="config-field-group-tech">
+                    <label for="metaIngresosTec" class="config-label-tech">Tec. y Terminales ($)</label>
+                    <input type="text" data-type="currency" id="metaIngresosTec" class="input-full input-full-tech"
+                        placeholder="$ 0" inputmode="numeric">
+                </div>
+                <div class="config-grid-3">
+                    <div class="config-row"><label for="metaNps">NPS</label><input type="number" id="metaNps" step="0.1"
+                            class="input-mini" placeholder="0%" min="0" max="100"></div>
+                    <div class="config-row"><label for="metaNoRetenidos">% NO RET</label><input type="number" id="metaNoRetenidos" step="0.01"
+                            class="input-mini" placeholder="0%" min="0" max="100"></div>
+                    <div class="config-row"><label for="metaCantNoRetenidosCAV">CANT RET</label><input type="number" id="metaCantNoRetenidosCAV"
+                            class="input-mini" placeholder="0" min="0"></div>
+                    <div class="config-row"><label for="metaTPA">TPA</label><input type="text" id="metaTPA" class="input-mini" placeholder="MM:SS" pattern="[0-9]{1,3}(:[0-5][0-9])?">
+                    </div>
+                    <div class="config-row"><label for="metaBrownfield">BROWN</label><input type="number" id="metaBrownfield"
+                            class="input-mini" placeholder="0" min="0"></div>
+                    <div class="config-row"><label for="metaUnidadesVentas">CONV</label><input type="number" id="metaUnidadesVentas" class="input-mini" placeholder="0" min="0">
+                    </div>
+                </div>
+                <div class="config-grid-3 config-grid-one-col">
+                    <div class="config-row"><label for="metaClaroUp">Claro Up</label><input type="number" id="metaClaroUp"
+                            class="input-mini" placeholder="0" min="0"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="main-container">
+        <div id="ventas-section" class="ventas-section-clean">
+            <!-- ELEMENTOS LÓGICA JS (OCULTOS) -->
+            <span id="current-period-display" class="hidden-logic"></span>
+            <span id="badge-total-var" class="hidden-logic"></span>
+
+            <div class="sales-cards">
+                <div class="card">
+                    <div class="card-header-mini"><label for="lineaNueva">LN <span class="meta-subtitle">Meta: <span id="disp-metaLineaNueva">0</span></span></label>
+                        <div class="card-badge" id="badge-lineaNueva">0%</div>
+                    </div><input type="number" id="lineaNueva" placeholder="0" min="0">
+                </div>
+                <div class="card">
+                    <div class="card-header-mini"><label for="portIn">Porta <span class="meta-subtitle">Meta: <span id="disp-metaPortIn">0</span></span></label>
+                        <div class="card-badge" id="badge-portIn">0%</div>
+                    </div><input type="number" id="portIn" placeholder="0" min="0">
+                </div>
+                <div class="card">
+                    <div class="card-header-mini"><label for="migracion">Migra <span class="meta-subtitle">Meta: <span id="disp-metaMigracion">0</span></span></label>
+                        <div class="card-badge" id="badge-migracion">0%</div>
+                    </div><input type="number" id="migracion" placeholder="0" min="0">
+                </div>
+                <div class="card">
+                    <div class="card-header-mini"><label for="ventasFijoAt">Fijo @ <span class="meta-subtitle">Meta: <span id="disp-metaVentasFijoAt">0</span></span></label>
+                        <div class="card-badge" id="badge-ventasFijoAt">0%</div>
+                    </div><input type="number" id="ventasFijoAt" placeholder="0" min="0">
+                </div>
+                <div class="card">
+                    <div class="card-header-mini"><label for="subFijoNeg">Neg @ <span class="meta-subtitle">Meta: <span id="disp-metaSubFijoNeg">0</span></span></label>
+                        <div class="card-badge" id="badge-subFijoNeg">0%</div>
+                    </div><input type="number" id="subFijoNeg" placeholder="0" min="0">
+                </div>
+                <div class="card">
+                    <div class="card-header-mini"><label for="ingresosTec">T y T ($) <span class="meta-subtitle">Meta: <span id="disp-metaIngresosTec">0</span></span></label>
+                        <div class="card-badge" id="badge-ingresosTec">0%</div>
+                    </div><input type="text" data-type="currency" id="ingresosTec" placeholder="$ 0" inputmode="numeric">
+                </div>
+                <div class="card">
+                    <div class="card-header-mini"><label for="tvVoz">TV + Voz <span class="meta-subtitle">Meta: <span id="disp-metaTvVoz">0</span></span></label>
+                        <div class="card-badge" id="badge-tvVoz">0%</div>
+                    </div><input type="number" id="tvVoz" placeholder="0" min="0">
+                </div>
+                <div class="card">
+                    <div class="card-header-mini"><label for="porcNoRetenidos">% No Ret <span class="meta-subtitle">Meta: <span id="disp-metaNoRetenidos">0</span></span></label>
+                        <div class="card-badge" id="badge-porcNoRetenidos">0%</div>
+                    </div><input type="number" id="porcNoRetenidos" placeholder="0%" min="0" max="100" step="0.01">
+                </div>
+                <div class="card">
+                    <div class="card-header-mini"><label for="cantNoRetenidosCAV">Cant Ret <span class="meta-subtitle">Meta: <span id="disp-metaCantNoRetenidosCAV">0</span></span></label>
+                        <div class="card-badge" id="badge-cantNoRetenidosCAV">0%</div>
+                    </div><input type="number" id="cantNoRetenidosCAV" placeholder="0" min="0">
+                </div>
+                <div class="card">
+                    <div class="card-header-mini"><label for="nps">NPS (%) <span class="meta-subtitle">Meta: <span id="disp-metaNps">0</span></span></label>
+                        <div class="card-badge" id="badge-nps">0%</div>
+                    </div><input type="number" id="nps" placeholder="0%" min="0" max="100" step="0.1">
+                </div>
+                <div class="card">
+                    <div class="card-header-mini"><label for="tpa">TPA <span class="meta-subtitle">Meta: <span id="disp-metaTPA">0</span></span></label>
+                        <div class="card-badge" id="badge-tpa">0%</div>
+                    </div><input type="text" id="tpa" placeholder="MM:SS" pattern="[0-9]{1,3}(:[0-5][0-9])?">
+                </div>
+                <div class="card">
+                    <div class="card-header-mini"><label for="brownfield">Brownfield <span class="meta-subtitle">Meta: <span id="disp-metaBrownfield">0</span></span></label>
+                        <div class="card-badge" id="badge-brownfield">0%</div>
+                    </div><input type="number" id="brownfield" placeholder="0" min="0">
+                </div>
+                <div class="card">
+                    <div class="card-header-mini"><label for="claroUpEjec">Claro Up <span class="meta-subtitle">Meta: <span id="disp-metaClaroUp">0</span></span></label>
+                        <div class="card-badge" id="badge-claroUpEjec">0%</div>
+                    </div><input type="number" id="claroUpEjec" placeholder="0" min="0">
+                </div>
+                <div class="card">
+                    <div class="card-header-mini"><label for="unidadesVentas">Conv. <span class="meta-subtitle">Meta: <span id="disp-metaUnidadesVentas">0</span></span></label>
+                        <div class="card-badge" id="badge-unidadesVentas">0%</div>
+                    </div><input type="number" id="unidadesVentas" placeholder="0" min="0">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- PANEL INFERIOR FIJO - DASHBOARD INTERACTIVO (OPCIÓN B) -->
+    <div id="bottom-panel-block" aria-expanded="false">
+        <!-- Tirador visual para indicar que se puede deslizar -->
+        <div id="drawer-handle"></div>
+        
+        <div id="bottom-nav">
+            <button id="config-toggle" class="nav-icon-btn" aria-label="Configuración">⚙️</button>
+            
+            <div id="live-result-container">
+                <div id="live-remVar">$ 0</div>
+                <div id="live-compliance">CUMPLIMIENTO: 0%</div>
+            </div>
+
+            <button id="reset-button" class="nav-icon-btn" aria-label="Reiniciar">🔄</button>
+        </div>
+
+        <!-- Contenido expandible del desglose -->
+        <div id="drawer-content">
+            <div class="result-divider"></div>
+            <ul id="live-breakdown-list" class="breakdown-list">
+                <!-- Se puebla vía JS en tiempo real -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIRMAR REINICIO -->
+    <div id="reset-confirm-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="reset-confirm-title" tabindex="-1">
+        <div class="ticket-style ticket-style-small">
+            <div id="reset-confirm-title" class="modal-panel-title">¿REINICIAR DATOS?</div>
+            <div class="modal-description">
+                Todos los valores y metas serán borrados permanentemente.
+            </div>
+            <div class="modal-footer-centered">
+                <button id="btn-cancel-reset" class="btn-secondary">Cancelar</button>
+                <button id="btn-confirm-reset" class="btn-danger">Borrar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-notification" class="toast">
+
+        <span class="toast-message"></span>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="bundle.js?v=46.0"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => {
+                        console.log('[App] Service Worker registrado:', reg.scope);
+
+                        // Detectar cuando hay una nueva versión disponible
+                        reg.addEventListener('updatefound', () => {
+                            const newWorker = reg.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // Hay una actualización lista — notificar al usuario
+                                    console.log('[App] Nueva versión disponible');
+                                    showUpdateToast(newWorker);
+                                }
+                            });
+                        });
+                    })
+                    .catch(err => console.warn('[App] Error al registrar Service Worker:', err));
+
+                // Recargar automáticamente si el SW tomó control (activación de nueva versión)
+                let refreshing = false;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (!refreshing) { refreshing = true; window.location.reload(); }
+                });
+            });
+        }
+
+        function showUpdateToast(worker) {
+            const toast = document.getElementById('toast-notification');
+            const msg = toast?.querySelector('.toast-message');
+            if (!toast || !msg) return;
+            msg.innerHTML = '🔄 Nueva versión disponible — <strong style="cursor:pointer;text-decoration:underline" onclick="applyUpdate()">Actualizar</strong>';
+            toast.className = 'toast show warning';
+            window.pendingWorker = worker;
+        }
+
+        function applyUpdate() {
+            if (window.pendingWorker) {
+                window.pendingWorker.postMessage({ type: 'SKIP_WAITING' });
+            }
+        }
+    </script>
+</body>
+
+</html>
